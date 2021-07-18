@@ -1,15 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 
-import { View, Text } from 'react-native'
-
-import * as firebase from 'firebase'
+import { View, Text } from 'react-native';
+import firebase from 'firebase';
 
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers'
 import thunk from 'redux-thunk'
-const store = createStore(rootReducer, applyMiddleware(thunk))
+const store = createStore(rootReducer, applyMiddleware(thunk)) 
 
 const firebaseConfig = {
   apiKey: "AIzaSyCO38QdpD8CWdFX2_yyhvQn9ZY6ciaNM1s",
@@ -21,7 +20,7 @@ const firebaseConfig = {
   measurementId: "G-6H0MXKXRCS"
 };
 
-if (firebase.apps.length === 0) {
+if(firebase.apps.length === 0){
   firebase.initializeApp(firebaseConfig)
 }
 
@@ -39,23 +38,22 @@ import CommentScreen from './components/main/Comment'
 
 const Stack = createStackNavigator();
 
-
 export class App extends Component {
-  constructor(props) {
-    super()
+  constructor(props){
+    super(props);
     this.state = {
       loaded: false,
     }
   }
 
-  componentDidMount() {
+  componentDidMount(){
     firebase.auth().onAuthStateChanged((user) => {
-      if (!user) {
+      if(!user){
         this.setState({
           loggedIn: false,
           loaded: true,
         })
-      } else {
+      }else {
         this.setState({
           loggedIn: true,
           loaded: true,
@@ -65,33 +63,31 @@ export class App extends Component {
   }
   render() {
     const { loggedIn, loaded } = this.state;
-    if (!loaded) {
-      return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+    if(!loaded){
+      return(
+        <View style={{flex: 1, justifyContent: 'center'}}>
           <Text>Loading</Text>
         </View>
       )
     }
-
-    if (!loggedIn) {
+    if(!loggedIn){
       return (
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Landing">
-            <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name ="Landing" component={LandingScreen} options={{ headerShown: false }}/>
+            <Stack.Screen name ="Register" component={RegisterScreen}/>
+            <Stack.Screen name ="Login" component={LoginScreen}/>
           </Stack.Navigator>
         </NavigationContainer>
       );
     }
-
-    return (
+    return(
       <Provider store={store}>
-        <NavigationContainer >
+        <NavigationContainer>
           <Stack.Navigator initialRouteName="Main">
-            <Stack.Screen name="Main" component={MainScreen} />
-            <Stack.Screen name="Add" component={AddScreen} navigation={this.props.navigation}/>
-            <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation}/>
+            <Stack.Screen name ="Main" component={MainScreen} />
+            <Stack.Screen name ="Add" component={AddScreen} navigation={this.props.navigation}/>
+            <Stack.Screen name ="Save" component={SaveScreen} navigation={this.props.navigation}/>
             <Stack.Screen name="Comment" component={CommentScreen} navigation={this.props.navigation}/>
           </Stack.Navigator>
         </NavigationContainer>
